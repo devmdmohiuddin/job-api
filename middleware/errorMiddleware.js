@@ -6,6 +6,7 @@ const notFound = (_, res) => {
 };
 
 const errorHandler = (err, req, res, next) => {
+  console.log(err)
   if (err instanceof CustomAPI) {
     return res.status(err.statusCode).json({ msg: err.message });
   }
