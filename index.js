@@ -4,6 +4,8 @@ const express = require("express");
 const morgan = require("morgan");
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
+const userRouter = require("./routes/userRoutes");
+const jobRouter = require("./routes/userRoutes");
 
 const app = express();
 
@@ -17,6 +19,9 @@ app.use([morgan("dev"), express.json()]);
 app.get("/", (_, res) => {
   res.status(200).send("Api is running...");
 });
+
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/jobs", jobRouter);
 
 app.use(notFound);
 app.use(errorHandler);
