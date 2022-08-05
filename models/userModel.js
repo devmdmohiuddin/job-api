@@ -43,13 +43,20 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-// token
-userSchema.methods.createToken = function () {
-  const token = jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
-    expiresIn: "30d",
+// creating a token
+userSchema.methods.createJWT = function () {
+  const token = jwt.sign({ userID: this._id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.LIFETIME,
   });
 
-  return token
+  return token;
+};
+
+// compare password
+userSchema.methods.comparePassword = async function (password) {
+  const isMatch = await bcrypt.compare(password, this.password);
+
+  return isMatch;
 };
 
 const User = model("User", userSchema);

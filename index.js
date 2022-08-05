@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const connectDB = require("./config/db");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 const userRouter = require("./routes/userRoutes");
-const jobRouter = require("./routes/userRoutes");
+const jobRouter = require("./routes/jobRoutes");
 
 const app = express();
 

@@ -1,5 +1,5 @@
 const { StatusCodes } = require("http-status-codes");
-const { BadRequest } = require("../errors");
+const { BadRequest, Unauthorize } = require("../errors");
 const User = require("../models/userModel");
 
 const register = async (req, res) => {
@@ -11,17 +11,37 @@ const register = async (req, res) => {
     throw new BadRequest("User already exist.");
   }
 
-  const createdUser = await User.create({ ...req.body });
+  // user create
+  const registerUser = await User.create({ ...req.body });
 
-  const token = createdUser.createToken();
+  // token create
+  const token = registerUser.createJWT();
 
   res
     .status(StatusCodes.CREATED)
-    .json({ status: "success", data: { createdUser, token } });
+    .json({ status: "success", data: { registerUser, token } });
 };
 
-const login = (req, res) => {
-  res.send("Login user");
+const login = async (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    throw new BadRequest("Please provide email and password");
+  }
+
+  // checking user credentials
+  const user = await User.findOne({ email });
+  console.log(user);
+  if (!user || !(await user.comparePassword(password))) {
+    throw new Unauthorize("Please give valid credentials");
+  }
+
+  // token create
+  const token = user.createJWT();
+
+  res
+    .status(StatusCodes.OK)
+    .json({ status: "success", data: { loginUser: user, token } });
 };
 
 module.exports = {
