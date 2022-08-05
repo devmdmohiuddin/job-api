@@ -14,12 +14,11 @@ const protected = async (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
-    
-    req.user = await User.findById(payload.userID).select("-password")
+    req.user = await User.findById(payload.userId).select("-password");
 
     next();
   } catch (err) {
-    console.log(err);
+    console.log(err.message);
   }
 };
 

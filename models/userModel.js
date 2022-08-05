@@ -45,7 +45,7 @@ userSchema.pre("save", async function (next) {
 
 // creating a token
 userSchema.methods.createJWT = function () {
-  const token = jwt.sign({ userID: this._id }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ userId: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.LIFETIME,
   });
 
